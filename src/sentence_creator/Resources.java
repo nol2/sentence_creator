@@ -1,5 +1,7 @@
 package sentence_creator;
 
+//Just a comment
+
 import java.util.*;
 
 public class Resources {
