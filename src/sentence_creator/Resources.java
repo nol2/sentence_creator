@@ -15,20 +15,36 @@ public class Resources {
 	private boolean wasNameAlready = false;
 	private boolean generateMore = false;
 	
+	private InputOutput read = new InputOutput();
+	
 	private int prev_rank = 0;
 	
+	/**
+	 * Constructor, just reads every files into ArrayLists
+	 */
 	public Resources() {
 		readFiles();
 	}
 	
+	/**
+	 * Gets the value of boolean debug
+	 * @return debug
+	 */
 	public boolean isDebug() {
 		return debug;
 	}
-
+	
+	/**
+	 * If debug is True, then we output the types of each word
+	 * @param debug
+	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
 
+	/**
+	 * Reads files into the ArrayLists
+	 */
 	private void readFiles() {
 		InputOutput fileRead = new InputOutput();
 		fileRead.read("noun_list.txt", nouns);
@@ -37,17 +53,28 @@ public class Resources {
 		fileRead.read("verb_list.txt", verbs);
 	}
 	
+	/**
+	 * Our driver code, calls every method according to the grammar
+	 * <S> -> <NounPhrase><Verb2><NounPhrase>
+	 */
 	public void sentence() {
 		do {
 			nounPhrase();
 			verb();
 			nounPhrase();
 			System.out.println();
-			//readUserInput(); needs resolving, does not read it the second time
+			readUserInput();
 		} while (generateMore);
 
 	}
 	
+	/**
+	 * Gets the <NounPhrase> according to the grammar
+	 * <NounPhrase> -> <Name><NounPhrase>
+	 * <NounPhrase> -> <Name><Conjunction><NounPhrase>
+	 * <NounPhrase> -> <Article><NounGroup>
+	 * 
+	 */
 	private void nounPhrase() {
 		Random rd = new Random();
 		int which = rd.nextInt(1000);
@@ -69,6 +96,9 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Prints out a random name from the ArrayList
+	 */
 	private void nameWrite() {
 		if(debug) {
 			System.out.print(names.get(randomWord(names.size()))+" (name) ");
@@ -78,6 +108,9 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Prints out an "and"
+	 */
 	private void conjunction() {
 		if(debug) {
 			System.out.print("and (conjunction) ");
@@ -88,6 +121,11 @@ public class Resources {
 		
 	}
 	
+	/**
+	 * Prints out an article
+	 * 
+	 * TODO: articles rules (a -> nouns starting with a consonant; an -> nouns starting with a vowel) 
+	 */
 	private void article() {
 		Random rd = new Random();
 		int which = rd.nextInt(1000);
@@ -109,6 +147,11 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Simulates an <NounGroup>
+	 * <NounGroup> -> <Noun>
+	 * <NounGroup> -> <Adjective><NounGroup>
+	 */
 	private void nounGroup() {
 		Random rd = new Random();
 		int which = rd.nextInt(1000);
@@ -121,6 +164,9 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Prints out a random verb
+	 */
 	private void verb() {
 		if(debug) {
 			System.out.print(verbs.get(randomWord(verbs.size()))+" (verb) ");
@@ -131,6 +177,9 @@ public class Resources {
 
 	}
 	
+	/**
+	 * Prints out a random noun
+	 */
 	private void noun() {
 		if(debug) {
 			System.out.print(nouns.get(randomWord(nouns.size())) + " (noun) ");
@@ -140,6 +189,11 @@ public class Resources {
 		}
 	}
 	
+	/**
+	 * Prints out an adjective
+	 * Gets a random adjective from the list, until the rank is right
+	 * Rank cannot be lower than the previous rank
+	 */
 	private void adjective() {
 		Adjectives temp = null;
 		do {
@@ -157,14 +211,22 @@ public class Resources {
 
 	}
 	
+	/**
+	 * Returns a random int which represents a place in the ArrayList
+	 * @param size - the current size of the ArrayList we use
+	 * @return index of random word
+	 */
 	private int randomWord(int size) {
 		Random rnd = new Random();
 		int place = rnd.nextInt(size);
 		return place;
 	}
 	
+	/**
+	 * Calls the readUserIO from InputOutput class
+	 */
 	public void readUserInput() {
-		InputOutput read = new InputOutput();
-		this.generateMore = read.readUserIO();
+		this.wasNameAlready = false;
+		this.generateMore = read.readUserIO(this.generateMore);
 	}
 }

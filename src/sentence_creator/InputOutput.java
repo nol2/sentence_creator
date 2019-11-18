@@ -8,6 +8,12 @@ public class InputOutput {
 	
 	private static Scanner sc = null;
 	
+	/**
+	 * Reads a file into an ArrayList
+	 * The file need to be formatted into one line with delimiters of ';'
+	 * @param file - the file which we want to read in
+	 * @param list - the ArrayList which we store the data
+	 */
 	public void read(String file, ArrayList<String> list) {
 			try {
 				sc = new Scanner(new File(file));
@@ -30,6 +36,12 @@ public class InputOutput {
 			}
 	}
 	
+	/**
+	 * Reads the file into an ArrayList of Adjective classes, and creates an Adjective class for each adjective
+	 * The file need to be formatted into one line with delimiters of ';'
+	 * @param file - the file which we want to read in
+	 * @param adjectives - an ArrayList of Adjective classes
+	 */
 	public void read_A(String file, ArrayList<Adjectives> adjectives) {
 		int current_index = 0;
 		String temp = "";
@@ -57,34 +69,35 @@ public class InputOutput {
 		}
 	}
 	
-	public boolean readUserIO() {
-		boolean rightAnswer = false;
-		boolean whatto_return = false;
-		try {
-			sc = new Scanner(System.in);
-			String answer = null;
-			do {
-				System.out.println("Generate one more? Y/N : ");
-				answer = System.console().readLine();
-				if(answer.equals("Y") || answer.equals("N")) {
-					rightAnswer = true;
-					if(answer.equals("Y")) {
-						whatto_return = true;
-					}
-					else {
-						whatto_return = false;
-					}
+	/**
+	 * Handles user input for generating more sentences
+	 * @param generateMore - current boolean for generating more
+	 * @return boolean for generating more, True if we want to generate more
+	 */
+	public boolean readUserIO(boolean generateMore) {
+		boolean correctAnswer = false;
+		do {
+			generateMore = false;
+			System.out.println("\nGenerate more? Y/N:");
+			Scanner sc = new Scanner(System.in);
+			String answer = sc.nextLine();
+			if(answer.equals("Y") || answer.equals("N")) {
+				correctAnswer = true;
+				if(answer.equals("Y")) {
+					generateMore = true;
 				}
 				else {
-					System.out.println("Did not understand your answer, try again!");
+					sc.close();
+					System.out.println("Exiting...");
 				}
-			} while (!rightAnswer);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		sc.close();
-		return whatto_return;
+			}
+			else {
+				System.out.println("Wrong input!");
+			}
+		}while(!correctAnswer);
+		
+		
+		
+		return generateMore;
 	}
 }
