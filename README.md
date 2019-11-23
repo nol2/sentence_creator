@@ -26,3 +26,5 @@ Such as:
 **5** Colour.  
 **6** Proper adjective (often nationality, other place of origin, or material).  
 **7** Purpose or qualifier.  
+
+Can be improved.
